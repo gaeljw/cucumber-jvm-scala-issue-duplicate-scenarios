@@ -1,0 +1,28 @@
+package cucumber.examples.scalacalculator
+
+import cucumber.api.Scenario
+import cucumber.api.scala.{EN, ScalaDsl}
+import org.junit.Assert._
+
+class RpnCalculatorStepDefinitions extends ScalaDsl with EN {
+
+  var calc: RpnCalculator = _
+
+  Before() { _ =>
+    calc = new RpnCalculator
+  }
+
+  When("""I add {double} and {double}"""){ (arg1: Double, arg2: Double) =>
+    calc push arg1
+    calc push arg2
+    calc push "+"
+  }
+
+  Then("the result is {double}") { expected: Double =>
+    assertEquals(expected, calc.value, 0.001)
+  }
+
+  Before("not @foo"){ scenario : Scenario =>
+    println("Runs before scenarios *not* tagged with @foo")
+  }
+}
